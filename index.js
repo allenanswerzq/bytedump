@@ -16,10 +16,38 @@ app.post('/', (req, res) => {
 
   var i, final = "";
   for (i = 0; i < data.tests.length; i++) {
+    var inp = data.tests[i].input.trim().split("\n");
+    // console.log(inp);
+    for (j = 0; j < inp.length; j++) {
+      if (inp[j] == "") {
+      // Handle the case where the input has a blank line.
+      // Intended add `//n` to represent a blank line.
+        inp[j] = "//n";
+      }
+    }
+    var input = "";
+    for (j = 0; j < inp.length; j++) {
+      input += inp[j];
+      input += "\n";
+    }
+    console.log(inp, input);
     final += "input\n";
-    final += data.tests[i].input;
+    final += input;
+    var out = data.tests[i].output.trim().split("\n");
+    // console.log(out);
+    for (j = 0; j < out.length; j++) {
+      if (out[j] == "") {
+        out[j] = "//n";
+      }
+    }
+    var output = "";
+    for (j = 0; j < out.length; j++) {
+      output += out[j];
+      output += "\n";
+    }
+    console.log(out, output);
     final += "output\n";
-    final += data.tests[i].output;
+    final += output;
   }
 
   const fs = require('fs');
