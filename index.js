@@ -13,13 +13,12 @@ app.post('/', (req, res) => {
   console.log('Full body:');
   console.log(JSON.stringify(data, null, 4));
   res.sendStatus(200);
-
   var i, final = "";
   for (i = 0; i < data.tests.length; i++) {
     var inp = data.tests[i].input.trim().split("\n");
     // console.log(inp);
     for (j = 0; j < inp.length; j++) {
-      if (inp[j] == "") {
+      if (inp[j].trim() == "") {
       // Handle the case where the input has a blank line.
       // Intended add `//n` to represent a blank line.
         inp[j] = "//n";
@@ -36,7 +35,7 @@ app.post('/', (req, res) => {
     var out = data.tests[i].output.trim().split("\n");
     // console.log(out);
     for (j = 0; j < out.length; j++) {
-      if (out[j] == "") {
+      if (out[j].trim() == "") {
         out[j] = "//n";
       }
     }
@@ -50,8 +49,12 @@ app.post('/', (req, res) => {
     final += output;
   }
 
+  write_name = '/tmp/algo-samples';
+  if (data.group == 'Codeforces - submission error') {
+    write_name = '/tmp/algo-wrong'
+  }
   const fs = require('fs');
-  fs.writeFile("/tmp/algo-samples", final, function(err) {
+  fs.writeFile(write_name, final, function(err) {
     if (err) {
       return console.log(err);
     }
